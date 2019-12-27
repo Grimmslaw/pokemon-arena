@@ -1,6 +1,6 @@
 package com.grimmslaw.pokemon.battle;
 
-import com.grimmslaw.pokemon.exceptions.WeatherException;
+import com.grimmslaw.pokemon.exceptions.battle.WeatherException;
 import com.grimmslaw.pokemon.model.Duration;
 import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
 import com.grimmslaw.pokemon.statuses.Effectable;

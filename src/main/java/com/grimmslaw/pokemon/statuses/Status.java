@@ -1,6 +1,6 @@
 package com.grimmslaw.pokemon.statuses;
 
-import com.grimmslaw.pokemon.exceptions.TurnableNumTargetException;
+import com.grimmslaw.pokemon.exceptions.statuses.TurnableNumTargetException;
 import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
 import com.grimmslaw.pokemon.statuses.containers.NonVolatileStatusContainer;
 import com.grimmslaw.pokemon.statuses.containers.VolatileBattleStatusContainer;

@@ -1,4 +1,4 @@
-package com.grimmslaw.pokemon.exceptions;
+package com.grimmslaw.pokemon.exceptions.statuses.containers;
 
 public class StatusesException extends Exception {
 

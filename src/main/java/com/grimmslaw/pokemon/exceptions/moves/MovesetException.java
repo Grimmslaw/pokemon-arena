@@ -1,4 +1,4 @@
-package com.grimmslaw.pokemon.exceptions;
+package com.grimmslaw.pokemon.exceptions.moves;
 
 /**
  * TODO

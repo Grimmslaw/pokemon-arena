@@ -5,8 +5,8 @@ import java.util.Map;
 
 import com.grimmslaw.pokemon.constants.Statistics;
 import com.grimmslaw.pokemon.constants.Statistics.Stat;
-import com.grimmslaw.pokemon.exceptions.EVOneSlotFullException;
-import com.grimmslaw.pokemon.exceptions.EVSlotsFullException;
+import com.grimmslaw.pokemon.exceptions.attributes.EVOneSlotFullException;
+import com.grimmslaw.pokemon.exceptions.attributes.EVSlotsFullException;
 
 /**
  * Defines an EffortValues object, with EVs corresponding to each stat and causing each stat to grow at a speed

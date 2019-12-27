@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.grimmslaw.pokemon.exceptions.MovesetException;
-import com.grimmslaw.pokemon.exceptions.MovesetFullException;
+import com.grimmslaw.pokemon.exceptions.moves.MovesetException;
+import com.grimmslaw.pokemon.exceptions.moves.MovesetFullException;
 
 /**
  * TODO

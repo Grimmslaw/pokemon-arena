@@ -1,7 +1,7 @@
 package com.grimmslaw.pokemon.statuses.containers;
 
-import com.grimmslaw.pokemon.exceptions.StatusesException;
-import com.grimmslaw.pokemon.exceptions.TurnableNumTargetException;
+import com.grimmslaw.pokemon.exceptions.statuses.containers.StatusesException;
+import com.grimmslaw.pokemon.exceptions.statuses.TurnableNumTargetException;
 import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
 import com.grimmslaw.pokemon.statuses.Effectable;
 import com.grimmslaw.pokemon.model.Duration;
