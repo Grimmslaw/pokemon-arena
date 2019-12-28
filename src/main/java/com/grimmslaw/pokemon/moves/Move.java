@@ -1,10 +1,12 @@
 package com.grimmslaw.pokemon.moves;
 
-import com.grimmslaw.pokemon.battle.Weather;
 import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
 import com.grimmslaw.pokemon.pokemon.DualTypePokemon;
 import com.grimmslaw.pokemon.pokemon.SingleTypePokemon;
 import com.grimmslaw.pokemon.types.Type;
+import com.grimmslaw.pokemon.util.MathUtilities;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The parent class to all move classes.
@@ -22,71 +24,56 @@ public abstract class Move {
     private int power;
     private int accuracy;
     private int priority;
+    private boolean hasEffect;
+
+    public Move(String name, Type type, PowerPoints pp, int power, int accuracy, int priority, boolean hasEffect) {
+        this.name = name;
+        this.type = type;
+        this.pp = pp;
+        this.power = power;
+        this.accuracy = accuracy;
+        this.priority = priority;
+        this.hasEffect = hasEffect;
+    }
 
     public Move(String name, Type type, PowerPoints pp, int power, int accuracy, int priority) {
-        setName(name);
-        setType(type);
-        setPp(pp);
-        setPower(power);
-        setAccuracy(accuracy);
-        setPriority(priority);
+        this(name, type, pp, power, accuracy, priority, false);
     }
 
     public Move(String name, Type type, int basePP, int maxPP, int power, int accuracy, int priority) {
-        setName(name);
-        setType(type);
-        setPp(new PowerPoints(basePP, maxPP));
-        setPower(power);
-        setAccuracy(accuracy);
-        setPriority(priority);
+        this(name, type, new PowerPoints(basePP, maxPP), power, accuracy, priority);
+    }
+
+    public Move(String name, Type type, int basePP, int maxPP, int power, int accuracy, int priority, boolean hasEffect) {
+        this(name, type, new PowerPoints(basePP, maxPP), power, accuracy, priority, hasEffect);
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Type getType() {
         return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     public PowerPoints getPp() {
         return pp;
     }
 
-    public void setPp(PowerPoints pp) {
-        this.pp = pp;
-    }
-
     public int getPower() {
         return power;
-    }
-
-    public void setPower(int power) {
-        this.power = power;
     }
 
     public int getAccuracy() {
         return accuracy;
     }
 
-    public void setAccuracy(int accuracy) {
-        this.accuracy = accuracy;
-    }
-
     public int getPriority() {
         return priority;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public boolean hasEffect() {
+        return hasEffect;
     }
 
     public double calculateTypeEffectiveness(AbstractPokemon defender) {
@@ -96,6 +83,17 @@ public abstract class Move {
             return getType().checkEffect(defender.getType(), ((DualTypePokemon) defender).getTypeSecond());
         }
         return 1.0;
+    }
+
+    public boolean attackDoesHit(AbstractPokemon attacker, AbstractPokemon defender) {
+        double thresholdToHit = MathUtilities.calculateHitThreshold(attacker, defender, this);
+        int hitPercent = ThreadLocalRandom.current().nextInt(0, 101);
+        return hitPercent <= thresholdToHit;
+    }
+
+    public void applyEffect() {
+        // TODO: hasEffect() should be checked already by the time this method is called
+        // TODO: apply the effect
     }
 
 }

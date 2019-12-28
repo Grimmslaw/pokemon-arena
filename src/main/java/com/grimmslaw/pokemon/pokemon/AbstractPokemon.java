@@ -8,6 +8,8 @@ import com.grimmslaw.pokemon.attributes.IndividualValues;
 import com.grimmslaw.pokemon.attributes.StatSet;
 import com.grimmslaw.pokemon.constants.Statistics;
 import com.grimmslaw.pokemon.constants.Statistics.Stat;
+import com.grimmslaw.pokemon.model.Damageable;
+import com.grimmslaw.pokemon.model.Faintable;
 import com.grimmslaw.pokemon.model.StatMap;
 import com.grimmslaw.pokemon.moves.Moveset;
 import com.grimmslaw.pokemon.natures.Nature;
@@ -21,7 +23,7 @@ import com.grimmslaw.pokemon.util.MathUtilities;
  * @author wesrickey
  * @since 0.0.1
  */
-public abstract class AbstractPokemon {
+public abstract class AbstractPokemon implements Damageable, Faintable {
 
     protected String name;
     protected StatSet baseStats;
@@ -264,4 +266,16 @@ public abstract class AbstractPokemon {
         }
     }
 
+    @Override
+    public double receiveDamage(int damage) {
+        double currentHP = getCurrentStats().get(Stat.HIT_POINTS);
+        double hpToSet = damage >= currentHP ? 0.0 : currentHP - damage;
+        getCurrentStats().setOneStat(Stat.HIT_POINTS, hpToSet);
+        return hpToSet;
+    }
+
+    @Override
+    public void doFaint() {
+        // TODO: do faint
+    }
 }
