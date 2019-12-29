@@ -1,5 +1,7 @@
 package com.grimmslaw.pokemon.moves;
 
+import java.util.StringJoiner;
+
 /**
  * TODO
  *
@@ -49,4 +51,13 @@ public class PowerPoints {
         setCurrentMax(getMax());
     }
 
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", PowerPoints.class.getSimpleName() + "[", "]")
+                .add("base=" + base)
+                .add("max=" + max)
+                .add("current=" + current)
+                .add("currentMax=" + currentMax)
+                .toString();
+    }
 }

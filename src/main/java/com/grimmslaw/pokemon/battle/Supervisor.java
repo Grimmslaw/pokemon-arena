@@ -1,7 +1,7 @@
 package com.grimmslaw.pokemon.battle;
 
 import com.grimmslaw.pokemon.model.DamageDealing;
-import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
+import com.grimmslaw.pokemon.pokemon.Pokemon;
 
 public class Supervisor implements DamageDealing {
 
@@ -17,10 +17,16 @@ public class Supervisor implements DamageDealing {
     }
 
     @Override
-    public void applyDamage(AbstractPokemon target, int damageToDeal) {
+    public void applyDamage(Pokemon target, int damageToDeal) {
         // TODO: implement any necessary checks here
         if (target.receiveDamage(damageToDeal) == 0.0) {
             target.doFaint();
         }
+    }
+
+    @Override
+    public void makeFaint(Pokemon target) {
+        // TODO: implement any necessary checks here
+        target.doFaint();
     }
 }

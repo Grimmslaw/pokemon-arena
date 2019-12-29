@@ -1,6 +1,7 @@
 package com.grimmslaw.pokemon.pokemon;
 
-import java.util.Map;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.grimmslaw.pokemon.abilities.Ability;
 import com.grimmslaw.pokemon.attributes.EffortValues;
@@ -17,13 +18,18 @@ import com.grimmslaw.pokemon.statuses.Status;
 import com.grimmslaw.pokemon.types.Type;
 import com.grimmslaw.pokemon.util.MathUtilities;
 
+import java.util.Objects;
+import java.util.StringJoiner;
+
 /**
- * Defines the attributes common to any pokemon and provides methods to initialize, set, and retrieve their values.
+ * Defines the attributes of a single-type pokemon and provides methods to initialize, set, and retrieve their values.
  *
  * @author wesrickey
  * @since 0.0.1
  */
-public abstract class AbstractPokemon implements Damageable, Faintable {
+public class Pokemon implements Damageable, Faintable {
+
+    private static final Logger logger = LogManager.getLogger(Pokemon.class);
 
     protected String name;
     protected StatSet baseStats;
@@ -41,12 +47,14 @@ public abstract class AbstractPokemon implements Damageable, Faintable {
     protected Status status;
     protected StatMap<Integer> statStages;
 
+    protected boolean fainted;
+
     /**
      * Empty constructor.
      *
      * Sets attributes to empty or default values.
      */
-    public AbstractPokemon() {
+    public Pokemon() {
         name = "";
         baseStats = new StatSet();
         level = 0;
@@ -57,7 +65,10 @@ public abstract class AbstractPokemon implements Damageable, Faintable {
         criticalStage = 0;
         status = new Status();
         statStages = initStatStages();
+        fainted = false;
         // current stats should be manually initialized
+
+        logger.trace("New Pokemon created with empty constructor.");
     }
 
     /**
@@ -72,8 +83,8 @@ public abstract class AbstractPokemon implements Damageable, Faintable {
      * @param ability	an attribute causing certain stat, battle, etc. attributes and values to differ from defaults
      * @param moveset	the (up to) four moves usable by this pokemon
      */
-    public AbstractPokemon(String name, StatSet baseStats, Type type, int level, Nature nature,
-                           StatMap<Integer> evs, Ability ability, Moveset moveset) {
+    public Pokemon(String name, StatSet baseStats, Type type, int level, Nature nature,
+                   StatMap<Integer> evs, Ability ability, Moveset moveset) {
         this.name = name;
         this.baseStats = baseStats;
         this.type = type;
@@ -86,8 +97,11 @@ public abstract class AbstractPokemon implements Damageable, Faintable {
         this.criticalStage = 0;
         this.status = initStatus();
         this.statStages = initStatStages();
+        this.fainted = false;
 
         initCurrentStats();
+
+        logger.trace("New Pokemon created: Pokemon=" + this);
     }
 
     /**
@@ -145,112 +159,63 @@ public abstract class AbstractPokemon implements Damageable, Faintable {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public StatSet getBaseStats() {
         return baseStats;
-    }
-
-    public void setBaseStats(StatSet baseStats) {
-        this.baseStats = baseStats;
     }
 
     public StatSet getCurrentStats() {
         return currentStats;
     }
 
-    public void setCurrentStats(StatSet currentStats) {
-        this.currentStats = currentStats;
-    }
-
     public Type getType() {
         return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
     }
 
     public int getLevel() {
         return level;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public Nature getNature() {
         return nature;
     }
 
-    public void setNature(Nature nature) {
-        this.nature = nature;
-    }
-
     public Ability getAbility() { return ability; }
-
-    public void setAbility(Ability ability) { this.ability = ability; }
 
     public IndividualValues getIVs() {
         return ivs;
-    }
-
-    public void setIVs(IndividualValues ivs) {
-        this.ivs = ivs;
-    }
-
-    public void setIVs(StatMap<Integer> ivsMap) {
-        this.ivs = initIVs(ivsMap);
     }
 
     public EffortValues getEVs() {
         return evs;
     }
 
-    public void setEVs(EffortValues evs) {
-        this.evs = evs;
-    }
-
-    public void setEVs(StatMap<Integer> evsMap) {
-        this.evs = initEVs(evsMap);
-    }
-
     public Moveset getMoveset() {
         return moveset;
-    }
-
-    public void setMoveset(Moveset moveset) {
-        this.moveset = moveset;
     }
 
     public int getCriticalStage() {
         return criticalStage;
     }
 
-    public void setCriticalStage(int criticalStage) {
-        this.criticalStage = criticalStage;
-    }
-
     public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
+    /**
+     * Generates a new (empty) {@linkplain Status} object.
+     *
+     * @return a new (empty) {@code Status} object
+     */
     public Status initStatus() {
         return new Status();
     }
 
-    public Map<Stat, Integer> getStatStages() {
+    public StatMap<Integer> getStatStages() {
         return statStages;
     }
 
-    public void setStatStages(StatMap<Integer> statStages) {
-        this.statStages = statStages;
+    public boolean isFainted() {
+        return fainted;
     }
 
     /**
@@ -276,6 +241,55 @@ public abstract class AbstractPokemon implements Damageable, Faintable {
 
     @Override
     public void doFaint() {
-        // TODO: do faint
+        logger.debug("Pokemon=" + this + " has fainted.");
+
+        fainted = true;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Pokemon.class.getSimpleName() + "[", "]")
+                .add("name='" + name + "'")
+                .add("baseStats=" + baseStats)
+                .add("currentStats=" + currentStats)
+                .add("type=" + type)
+                .add("level=" + level)
+                .add("nature=" + nature)
+                .add("ability=" + ability)
+                .add("ivs=" + ivs)
+                .add("evs=" + evs)
+                .add("moveset=" + moveset)
+                .add("criticalStage=" + criticalStage)
+                .add("status=" + status)
+                .add("statStages=" + statStages)
+                .add("fainted=" + fainted)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pokemon pokemon = (Pokemon) o;
+        return level == pokemon.level &&
+                criticalStage == pokemon.criticalStage &&
+                fainted == pokemon.fainted &&
+                Objects.equals(name, pokemon.name) &&
+                Objects.equals(baseStats, pokemon.baseStats) &&
+                Objects.equals(currentStats, pokemon.currentStats) &&
+                type == pokemon.type &&
+                nature == pokemon.nature &&
+                ability == pokemon.ability &&
+                Objects.equals(ivs, pokemon.ivs) &&
+                Objects.equals(evs, pokemon.evs) &&
+                Objects.equals(moveset, pokemon.moveset) &&
+                Objects.equals(status, pokemon.status) &&
+                Objects.equals(statStages, pokemon.statStages);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, baseStats, currentStats, type, level, nature, ability, ivs, evs, moveset,
+                criticalStage, status, statStages, fainted);
     }
 }

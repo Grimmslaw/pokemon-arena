@@ -1,9 +1,11 @@
 package com.grimmslaw.pokemon.model;
 
-import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
+import com.grimmslaw.pokemon.pokemon.Pokemon;
 
 public interface DamageDealing {
 
-    void applyDamage(AbstractPokemon target, int damageToDeal);
+    void applyDamage(Pokemon target, int damageToDeal);
+
+    void makeFaint(Pokemon target);
 
 }

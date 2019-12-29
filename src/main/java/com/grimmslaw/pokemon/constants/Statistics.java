@@ -1,6 +1,6 @@
 package com.grimmslaw.pokemon.constants;
 
-import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
+import com.grimmslaw.pokemon.pokemon.Pokemon;
 
 import java.util.Arrays;
 
@@ -61,7 +61,7 @@ public class Statistics {
         return value * getMultiplierByStage(stat, stage);
     }
 
-    public static double getStatValueIncludingStage(Stat stat, AbstractPokemon pokemon) {
+    public static double getStatValueIncludingStage(Stat stat, Pokemon pokemon) {
         return getStatValueIncludingStage(stat, pokemon.getCurrentStats().get(stat), pokemon.getStatStages().get(stat));
     }
 

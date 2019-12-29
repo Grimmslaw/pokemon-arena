@@ -1,12 +1,13 @@
 package com.grimmslaw.pokemon.attributes;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.grimmslaw.pokemon.constants.Statistics;
 import com.grimmslaw.pokemon.constants.Statistics.Stat;
 import com.grimmslaw.pokemon.exceptions.attributes.EVOneSlotFullException;
 import com.grimmslaw.pokemon.exceptions.attributes.EVSlotsFullException;
+import com.grimmslaw.pokemon.model.StatMap;
+
+import java.util.Objects;
+import java.util.StringJoiner;
 
 /**
  * Defines an EffortValues object, with EVs corresponding to each stat and causing each stat to grow at a speed
@@ -17,16 +18,16 @@ import com.grimmslaw.pokemon.exceptions.attributes.EVSlotsFullException;
  */
 public class EffortValues {
 
-    private Map<Stat, Integer> valuesMap;
+    private StatMap<Integer> valueMap;
     private int totalEVs = 0;
 
     /**
      * Empty constructor initializing a map containing an EV for each stat, setting each value to 0.
      */
     public EffortValues() {
-        valuesMap = new HashMap<>();
+        valueMap = new StatMap<>();
         for (Stat stat : Statistics.STATS) {
-            valuesMap.put(stat, 0);
+            valueMap.put(stat, 0);
         }
     }
 
@@ -35,15 +36,15 @@ public class EffortValues {
      *
      * @param initEVs	the map to copy the EVs' values from
      */
-    public EffortValues(Map<Stat, Integer> initEVs) {
-        valuesMap = initEVs;
+    public EffortValues(StatMap<Integer> initEVs) {
+        valueMap = initEVs;
         for (Stat stat : initEVs.keySet()) {
             totalEVs += initEVs.get(stat);
         }
     }
 
-    public Map<Stat, Integer> getEVs() {
-        return valuesMap;
+    public StatMap<Integer> getEVs() {
+        return valueMap;
     }
 
     public int getTotalEVs() {
@@ -61,7 +62,7 @@ public class EffortValues {
      * @return the corresponding EV
      */
     public int getOneEV(Stat stat) {
-        return valuesMap.get(stat);
+        return valueMap.get(stat);
     }
 
     /**
@@ -100,4 +101,25 @@ public class EffortValues {
         }
     }
 
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", EffortValues.class.getSimpleName() + "[", "]")
+                .add("valueMap=" + valueMap)
+                .add("totalEVs=" + totalEVs)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EffortValues that = (EffortValues) o;
+        return totalEVs == that.totalEVs &&
+                Objects.equals(valueMap, that.valueMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(valueMap, totalEVs);
+    }
 }

@@ -2,12 +2,14 @@ package com.grimmslaw.pokemon.statuses.containers;
 
 import com.grimmslaw.pokemon.exceptions.statuses.containers.StatusesException;
 import com.grimmslaw.pokemon.exceptions.statuses.TurnableNumTargetException;
-import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
+import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.statuses.Effectable;
 import com.grimmslaw.pokemon.model.Duration;
 import com.grimmslaw.pokemon.statuses.Turnable;
 import com.grimmslaw.pokemon.util.ReplacingDeque;
 
+import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.function.Consumer;
 
 /**
@@ -36,7 +38,7 @@ public class VolatileStatusContainer extends AbstractStatusContainer implements 
         TAUNT(-1, (target) -> {}, () -> {}),
         TORMENT(-1, (target) -> {}, () -> {});
 
-        VolatileStatusType(int startingDuration, Consumer<AbstractPokemon> applyEffectMethodToSet,
+        VolatileStatusType(int startingDuration, Consumer<Pokemon> applyEffectMethodToSet,
                            Runnable tickMethodToSet) {
             duration = new Duration(startingDuration);
             applyEffectMethod = applyEffectMethodToSet;
@@ -44,12 +46,12 @@ public class VolatileStatusContainer extends AbstractStatusContainer implements 
         }
 
         public Duration duration;
-        public Consumer<AbstractPokemon> applyEffectMethod;
+        public Consumer<Pokemon> applyEffectMethod;
         public Runnable tickMethod;
 
 
         @Override
-        public void applyEffect(AbstractPokemon... targets) throws TurnableNumTargetException {
+        public void applyEffect(Pokemon... targets) throws TurnableNumTargetException {
             if (targets.length == 1) {
                 applyEffectMethod.accept(targets[0]);
             } else {
@@ -78,7 +80,7 @@ public class VolatileStatusContainer extends AbstractStatusContainer implements 
     }
 
     @Override
-    public void applyEffect(AbstractPokemon... targets) throws TurnableNumTargetException {
+    public void applyEffect(Pokemon... targets) throws TurnableNumTargetException {
         for (VolatileStatusType status : statuses) {
             status.applyEffect(targets);
         }
@@ -107,6 +109,26 @@ public class VolatileStatusContainer extends AbstractStatusContainer implements 
         }
 
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", VolatileStatusContainer.class.getSimpleName() + "[", "]")
+                .add("statuses=" + statuses)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VolatileStatusContainer that = (VolatileStatusContainer) o;
+        return Objects.equals(statuses, that.statuses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(statuses);
     }
 
 }

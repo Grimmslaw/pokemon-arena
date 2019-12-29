@@ -1,7 +1,7 @@
 package com.grimmslaw.pokemon.statuses;
 
 import com.grimmslaw.pokemon.exceptions.statuses.TurnableNumTargetException;
-import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
+import com.grimmslaw.pokemon.pokemon.Pokemon;
 
 /**
  * TODO
@@ -11,7 +11,7 @@ import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
  */
 public interface Turnable {
 
-    void applyEffect(AbstractPokemon... targets) throws TurnableNumTargetException;
+    void applyEffect(Pokemon... targets) throws TurnableNumTargetException;
 
     void tick();
 

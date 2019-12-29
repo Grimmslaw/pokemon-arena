@@ -1,8 +1,6 @@
 package com.grimmslaw.pokemon.moves;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import com.grimmslaw.pokemon.exceptions.moves.MovesetException;
 import com.grimmslaw.pokemon.exceptions.moves.MovesetFullException;
@@ -47,6 +45,26 @@ public class Moveset {
         } else {
             throw new MovesetFullException();
         }
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Moveset.class.getSimpleName() + "[", "]")
+                .add("movesList=" + movesList)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Moveset moveset = (Moveset) o;
+        return Objects.equals(movesList, moveset.movesList);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(movesList);
     }
 
 }

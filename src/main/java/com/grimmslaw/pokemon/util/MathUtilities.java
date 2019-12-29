@@ -8,7 +8,7 @@ import com.grimmslaw.pokemon.constants.Statistics.Stat;
 import com.grimmslaw.pokemon.moves.Move;
 import com.grimmslaw.pokemon.moves.PhysicalMove;
 import com.grimmslaw.pokemon.moves.SpecialMove;
-import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
+import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.pokemon.DualTypePokemon;
 import com.grimmslaw.pokemon.statuses.containers.NonVolatileStatusContainer.NonVolatileStatusType;
 import com.grimmslaw.pokemon.types.Type;
@@ -36,7 +36,7 @@ public class MathUtilities {
         return 1.0;
     }
 
-    private static double determineSameTypeAttackBonus(Move move, AbstractPokemon attacker) {
+    private static double determineSameTypeAttackBonus(Move move, Pokemon attacker) {
         boolean hasAdaptability = attacker.getAbility() == Ability.ADAPTABILITY;
         if (attacker instanceof DualTypePokemon) {
             DualTypePokemon dualTypeAttacker = (DualTypePokemon) attacker;
@@ -50,7 +50,7 @@ public class MathUtilities {
         return 1.0;
     }
 
-    private static double determineBurnMultiplier(AbstractPokemon attacker, Move move) {
+    private static double determineBurnMultiplier(Pokemon attacker, Move move) {
         if ((attacker.getStatus().getCurrentNonVolatileStatus() == NonVolatileStatusType.BURN)
                 && (attacker.getAbility() != Ability.GUTS)
                 && (move instanceof PhysicalMove)) {
@@ -65,7 +65,7 @@ public class MathUtilities {
         return target * weather * badge * critical * random * stab * typeEffectiveness * burn * other;
     }
 
-    public static double calculateDamage(Move move, AbstractPokemon attacker, AbstractPokemon defender, int numTargets,
+    public static double calculateDamage(Move move, Pokemon attacker, Pokemon defender, int numTargets,
                                          Weather weather, boolean isCritical, double otherMultiplier) {
         double attackOrSpAttackVal;
         double defenseOrSpDefenseVAl;
@@ -100,32 +100,44 @@ public class MathUtilities {
                 *(attackOrSpAttackVal/defenseOrSpDefenseVAl))/50)+2)*modifier;
     }
 
-    public static int calculateHP(AbstractPokemon pokemon) {
+    public static int calculateHP(Pokemon pokemon) {
         return (int) Math.floor((((2*pokemon.getBaseStats().get(Stat.HIT_POINTS))+pokemon.getIVs().get(Stat.HIT_POINTS)
                 +Math.floor(pokemon.getEVs().getOneEV(Stat.HIT_POINTS)/4.0))*pokemon.getLevel())/100)
                 +pokemon.getLevel()+10;
     }
 
-    public static int calculateStat(AbstractPokemon pokemon, Stat statToSet) {
+    public static int calculateStat(Pokemon pokemon, Stat statToSet) {
         return (int) (Math.floor(Math.floor(((2*pokemon.getBaseStats().get(statToSet))
                 +pokemon.getIVs().get(statToSet)+Math.floor(pokemon.getEVs().getOneEV(statToSet)/4.0))
                 *pokemon.getLevel()/100)+5)*pokemon.getNature().getMultiplierForStat(statToSet));
     }
 
-    private static double determineAttackAdjustedStage(AbstractPokemon attacker, AbstractPokemon defender) {
+    private static double calculateStatAdjustedStage(Pokemon attacker, Stat stat) {
+        double statValue = attacker.getCurrentStats().get(stat);
+        double statStageMultiplier = Statistics.getStatValueIncludingStage(stat, attacker);
+        return statValue * statStageMultiplier;
+    }
+
+    public static int compareStageAdjustedStat(Pokemon pokemon1, Pokemon pokemon2, Stat stat) {
+        double pokemon1AdjustedStat = calculateStatAdjustedStage(pokemon1, stat);
+        double pokemon2AdjustedStat = calculateStatAdjustedStage(pokemon2, stat);
+        return Double.compare(pokemon1AdjustedStat, pokemon2AdjustedStat);
+    }
+
+    public static double determineAttackHitAdjustedStages(Pokemon attacker, Pokemon defender) {
         // TODO: account for abilities or specific moves that affect accuracy/evasion
         return (Statistics.getStatValueIncludingStage(Stat.ACCURACY, attacker)
                 - Statistics.getStatValueIncludingStage(Stat.EVASION, defender));
     }
 
-    private static double determineAttackOtherMods(AbstractPokemon attacker, AbstractPokemon defender, Move move) {
+    private static double determineAttackOtherMods(Pokemon attacker, Pokemon defender, Move move) {
         // TODO: actually create the logic for this -- abilities and special moves
         return 1.0;
     }
 
-    public static double calculateHitThreshold(AbstractPokemon attacker, AbstractPokemon defender, Move move) {
+    public static double calculateHitThreshold(Pokemon attacker, Pokemon defender, Move move) {
         return move.getAccuracy()
-                * determineAttackAdjustedStage(attacker, defender)
+                * determineAttackHitAdjustedStages(attacker, defender)
                 * determineAttackOtherMods(attacker, defender, move);
     }
 

@@ -1,6 +1,14 @@
 package com.grimmslaw.pokemon.model;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.util.Objects;
+import java.util.StringJoiner;
+
 public class Duration {
+
+    private static final Logger logger = LogManager.getLogger(Duration.class);
 
     private int startingDuration;
     private int currentDuration;
@@ -30,9 +38,33 @@ public class Duration {
     }
 
     public void tick() {
+        logger.trace(this.getClass().getCanonicalName() + "#tick called");
+
         if (currentDuration > 0) {
             currentDuration--;
         }
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Duration.class.getSimpleName() + "[", "]")
+                .add("startingDuration=" + startingDuration)
+                .add("currentDuration=" + currentDuration)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Duration duration = (Duration) o;
+        return startingDuration == duration.startingDuration &&
+                currentDuration == duration.currentDuration;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startingDuration, currentDuration);
     }
 
 }

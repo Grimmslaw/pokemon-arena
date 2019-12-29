@@ -2,10 +2,12 @@ package com.grimmslaw.pokemon.battle;
 
 import com.grimmslaw.pokemon.exceptions.battle.WeatherException;
 import com.grimmslaw.pokemon.model.Duration;
-import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
+import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.statuses.Effectable;
 import com.grimmslaw.pokemon.statuses.Turnable;
 
+import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.function.Consumer;
 
 /**
@@ -37,23 +39,23 @@ public class Weather implements Turnable {
         FOG(-1, (target) -> {}, () -> {}),
         STRONG_WINDS(-1, (target) -> {}, () -> {});
 
-        WeatherType(int startingDuration, Consumer<AbstractPokemon> applyEffectMethodToSet, Runnable tickMethodToSet) {
+        WeatherType(int startingDuration, Consumer<Pokemon> applyEffectMethodToSet, Runnable tickMethodToSet) {
             duration = new Duration(startingDuration);
             applyEffectMethod = applyEffectMethodToSet;
             tickMethod = tickMethodToSet;
         }
 
         public Duration duration;
-        public Consumer<AbstractPokemon> applyEffectMethod;
+        public Consumer<Pokemon> applyEffectMethod;
         public Runnable tickMethod;
 
-        private void applyEffectToOneTarget(AbstractPokemon target) {
+        private void applyEffectToOneTarget(Pokemon target) {
             applyEffectMethod.accept(target);
         }
 
         @Override
-        public void applyEffect(AbstractPokemon... targets) {
-            for (AbstractPokemon target : targets) {
+        public void applyEffect(Pokemon... targets) {
+            for (Pokemon target : targets) {
                 applyEffectToOneTarget(target);
             }
         }
@@ -80,7 +82,7 @@ public class Weather implements Turnable {
     }
 
     @Override
-    public void applyEffect(AbstractPokemon... targets) {
+    public void applyEffect(Pokemon... targets) {
         getCurrentWeather().applyEffect();
     }
 
@@ -97,4 +99,23 @@ public class Weather implements Turnable {
         }
     }
 
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Weather.class.getSimpleName() + "[", "]")
+                .add("currentWeather=" + currentWeather)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Weather weather = (Weather) o;
+        return currentWeather == weather.currentWeather;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currentWeather);
+    }
 }

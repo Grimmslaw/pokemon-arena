@@ -1,11 +1,15 @@
 package com.grimmslaw.pokemon.moves;
 
-import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
+import com.grimmslaw.pokemon.model.AttackResult;
+import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.pokemon.DualTypePokemon;
-import com.grimmslaw.pokemon.pokemon.SingleTypePokemon;
 import com.grimmslaw.pokemon.types.Type;
 import com.grimmslaw.pokemon.util.MathUtilities;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -17,6 +21,8 @@ import java.util.concurrent.ThreadLocalRandom;
  * @since 0.0.1
  */
 public abstract class Move {
+
+    private static final Logger logger = LogManager.getLogger(Move.class);
 
     private String name;
     private Type type;
@@ -76,24 +82,62 @@ public abstract class Move {
         return hasEffect;
     }
 
-    public double calculateTypeEffectiveness(AbstractPokemon defender) {
-        if (defender instanceof SingleTypePokemon) {
-            return getType().checkEffect(defender.getType());
-        } else if (defender instanceof DualTypePokemon) {
+    public double calculateTypeEffectiveness(Pokemon defender) {
+        if (defender instanceof DualTypePokemon) {
             return getType().checkEffect(defender.getType(), ((DualTypePokemon) defender).getTypeSecond());
+        } else {
+            return getType().checkEffect(defender.getType());
         }
-        return 1.0;
     }
 
-    public boolean attackDoesHit(AbstractPokemon attacker, AbstractPokemon defender) {
+    public boolean attackDoesHit(Pokemon attacker, Pokemon defender) {
         double thresholdToHit = MathUtilities.calculateHitThreshold(attacker, defender, this);
         int hitPercent = ThreadLocalRandom.current().nextInt(0, 101);
+
+        logger.debug("Attack does " + ((hitPercent <= thresholdToHit) ? "" : "not ") + "hit.");
         return hitPercent <= thresholdToHit;
+    }
+
+    public AttackResult doAttack(Pokemon attacker, Pokemon defender) {
+        // TODO:
+        return null;
     }
 
     public void applyEffect() {
         // TODO: hasEffect() should be checked already by the time this method is called
         // TODO: apply the effect
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", Move.class.getSimpleName() + "[", "]")
+                .add("name='" + name + "'")
+                .add("type=" + type)
+                .add("pp=" + pp)
+                .add("power=" + power)
+                .add("accuracy=" + accuracy)
+                .add("priority=" + priority)
+                .add("hasEffect=" + hasEffect)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Move move = (Move) o;
+        return power == move.power &&
+                accuracy == move.accuracy &&
+                priority == move.priority &&
+                hasEffect == move.hasEffect &&
+                Objects.equals(name, move.name) &&
+                type == move.type &&
+                Objects.equals(pp, move.pp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, type, pp, power, accuracy, priority, hasEffect);
     }
 
 }

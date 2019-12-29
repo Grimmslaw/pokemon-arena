@@ -1,11 +1,12 @@
 package com.grimmslaw.pokemon.attributes;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
+import java.util.StringJoiner;
 
 import com.grimmslaw.pokemon.constants.Statistics;
 import com.grimmslaw.pokemon.constants.Statistics.Stat;
+import com.grimmslaw.pokemon.model.StatMap;
 
 /**
  * Defines an IndividualValues object, with IVs corresponding to each stat and causing each stat to grow at a speed
@@ -18,21 +19,21 @@ import com.grimmslaw.pokemon.constants.Statistics.Stat;
  */
 public class IndividualValues {
 
-    private Map<Stat, Integer> valueMap;
+    private StatMap<Integer> valueMap;
 
     public IndividualValues() {
         setValues(generateIVs());
     }
 
-    public IndividualValues(Map<Stat, Integer> initIVs) {
+    public IndividualValues(StatMap<Integer> initIVs) {
         setValues(initIVs);
     }
 
-    public Map<Stat, Integer> getIVs() {
+    public StatMap<Integer> getIVs() {
         return valueMap;
     }
 
-    public void setValues(Map<Stat, Integer> valueMap) {
+    public void setValues(StatMap<Integer> valueMap) {
         this.valueMap = valueMap;
     }
 
@@ -45,12 +46,33 @@ public class IndividualValues {
      *
      * @return an initialized mapping of stats to their IVs
      */
-    public static Map<Stat, Integer> generateIVs() {
+    public static StatMap<Integer> generateIVs() {
         Random rand = new Random();
-        Map<Stat, Integer> ivsMap = new HashMap<>();
+        StatMap<Integer> ivsMap = new StatMap<>();
         for (Stat stat : Statistics.STATS) {
             ivsMap.put(stat, rand.nextInt(32));
         }
         return ivsMap;
     }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", IndividualValues.class.getSimpleName() + "[", "]")
+                .add("valueMap=" + valueMap)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IndividualValues that = (IndividualValues) o;
+        return Objects.equals(valueMap, that.valueMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(valueMap);
+    }
+
 }

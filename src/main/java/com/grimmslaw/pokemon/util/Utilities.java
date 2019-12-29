@@ -1,8 +1,6 @@
 package com.grimmslaw.pokemon.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Utilities {
 
@@ -16,6 +14,12 @@ public class Utilities {
             listToReturn.add(value);
         }
         return listToReturn;
+    }
+
+    public static <K, V> Map<K, V> initMapFromTwoArgs(K arg1, V arg2) {
+        Map<K, V> mapToReturn = new HashMap<>();
+        mapToReturn.put(arg1, arg2);
+        return mapToReturn;
     }
 
 }

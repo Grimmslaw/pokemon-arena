@@ -1,8 +1,10 @@
 package com.grimmslaw.pokemon.attributes;
 
-import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 import com.grimmslaw.pokemon.constants.Statistics.Stat;
+import com.grimmslaw.pokemon.model.StatMap;
 
 /**
  * TODO
@@ -12,7 +14,7 @@ import com.grimmslaw.pokemon.constants.Statistics.Stat;
  */
 public class StatSet {
 
-    private Map<Stat, Double> stats;
+    private StatMap<Double> stats = new StatMap<>();
 
     /**
      * Empty constructor setting each stat to 0.0.
@@ -51,7 +53,7 @@ public class StatSet {
         return stats.get(statToGet);
     }
 
-    public Map<Stat, Double> getStats() {
+    public StatMap<Double> getStats() {
         return stats;
     }
 
@@ -65,4 +67,23 @@ public class StatSet {
         getStats().put(stat, value);
     }
 
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", StatSet.class.getSimpleName() + "[", "]")
+                .add("stats=" + stats)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StatSet statSet = (StatSet) o;
+        return Objects.equals(stats, statSet.stats);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stats);
+    }
 }

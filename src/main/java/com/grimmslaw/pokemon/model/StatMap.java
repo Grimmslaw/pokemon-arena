@@ -1,9 +1,6 @@
 package com.grimmslaw.pokemon.model;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import com.grimmslaw.pokemon.constants.Statistics.Stat;
 
@@ -83,6 +80,26 @@ public class StatMap<E> implements Map<Stat, E> {
     @Override
     public Set<Entry<Stat, E>> entrySet() {
         return innerMap.entrySet();
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", StatMap.class.getSimpleName() + "[", "]")
+                .add("innerMap=" + innerMap)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StatMap<?> statMap = (StatMap<?>) o;
+        return Objects.equals(innerMap, statMap.innerMap);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(innerMap);
     }
 
 }

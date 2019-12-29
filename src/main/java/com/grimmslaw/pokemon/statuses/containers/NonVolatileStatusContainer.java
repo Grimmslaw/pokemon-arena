@@ -1,11 +1,13 @@
 package com.grimmslaw.pokemon.statuses.containers;
 
+import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.function.Consumer;
 
 import com.grimmslaw.pokemon.exceptions.statuses.containers.StatusSlotFullException;
 import com.grimmslaw.pokemon.exceptions.statuses.containers.StatusesException;
 import com.grimmslaw.pokemon.exceptions.statuses.TurnableNumTargetException;
-import com.grimmslaw.pokemon.pokemon.AbstractPokemon;
+import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.statuses.Effectable;
 import com.grimmslaw.pokemon.model.Duration;
 import com.grimmslaw.pokemon.statuses.Turnable;
@@ -24,7 +26,7 @@ public class NonVolatileStatusContainer extends AbstractStatusContainer implemen
         POISON(-1, (target) -> {}, () -> {}),
         SLEEP(-1, (target) -> {}, () -> {});
 
-        NonVolatileStatusType(int startingDuration, Consumer<AbstractPokemon> applyEffectMethodToSet,
+        NonVolatileStatusType(int startingDuration, Consumer<Pokemon> applyEffectMethodToSet,
                               Runnable tickMethodToSet) {
             duration = new Duration(startingDuration);
             applyEffectMethod = applyEffectMethodToSet;
@@ -32,11 +34,11 @@ public class NonVolatileStatusContainer extends AbstractStatusContainer implemen
         }
 
         public Duration duration;
-        public Consumer<AbstractPokemon> applyEffectMethod;
+        public Consumer<Pokemon> applyEffectMethod;
         public Runnable tickMethod;
 
         @Override
-        public void applyEffect(AbstractPokemon... targets) throws TurnableNumTargetException {
+        public void applyEffect(Pokemon... targets) throws TurnableNumTargetException {
             if (targets.length == 1) {
                 applyEffectMethod.accept(targets[0]);
             } else {
@@ -65,7 +67,7 @@ public class NonVolatileStatusContainer extends AbstractStatusContainer implemen
     }
 
     @Override
-    public void applyEffect(AbstractPokemon... targets) throws TurnableNumTargetException {
+    public void applyEffect(Pokemon... targets) throws TurnableNumTargetException {
         getCurrentStatus().applyEffect(targets);
     }
 
@@ -90,6 +92,26 @@ public class NonVolatileStatusContainer extends AbstractStatusContainer implemen
     @Override
     public boolean hasStatus(Effectable status) {
         return getCurrentStatus() == status;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", NonVolatileStatusContainer.class.getSimpleName() + "[", "]")
+                .add("currentStatus=" + currentStatus)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NonVolatileStatusContainer that = (NonVolatileStatusContainer) o;
+        return currentStatus == that.currentStatus;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(currentStatus);
     }
 
 }
