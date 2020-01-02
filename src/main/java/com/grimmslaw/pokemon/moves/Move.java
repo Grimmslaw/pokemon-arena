@@ -1,5 +1,6 @@
 package com.grimmslaw.pokemon.moves;
 
+import com.grimmslaw.pokemon.battle.BattleContext;
 import com.grimmslaw.pokemon.model.AttackResult;
 import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.pokemon.DualTypePokemon;
@@ -30,28 +31,29 @@ public abstract class Move {
     private int power;
     private int accuracy;
     private int priority;
-    private boolean hasEffect;
+    private MoveEffect moveEffect;
 
-    public Move(String name, Type type, PowerPoints pp, int power, int accuracy, int priority, boolean hasEffect) {
+    public Move(String name, Type type, PowerPoints pp, int power, int accuracy, int priority, MoveEffect moveEffect) {
         this.name = name;
         this.type = type;
         this.pp = pp;
         this.power = power;
         this.accuracy = accuracy;
         this.priority = priority;
-        this.hasEffect = hasEffect;
+        this.moveEffect = moveEffect;
     }
 
     public Move(String name, Type type, PowerPoints pp, int power, int accuracy, int priority) {
-        this(name, type, pp, power, accuracy, priority, false);
+        this(name, type, pp, power, accuracy, priority, null);
     }
 
     public Move(String name, Type type, int basePP, int maxPP, int power, int accuracy, int priority) {
         this(name, type, new PowerPoints(basePP, maxPP), power, accuracy, priority);
     }
 
-    public Move(String name, Type type, int basePP, int maxPP, int power, int accuracy, int priority, boolean hasEffect) {
-        this(name, type, new PowerPoints(basePP, maxPP), power, accuracy, priority, hasEffect);
+    public Move(String name, Type type, int basePP, int maxPP, int power, int accuracy, int priority,
+                MoveEffect moveEffect) {
+        this(name, type, new PowerPoints(basePP, maxPP), power, accuracy, priority, moveEffect);
     }
 
     public String getName() {
@@ -79,7 +81,11 @@ public abstract class Move {
     }
 
     public boolean hasEffect() {
-        return hasEffect;
+        return getMoveEffect() != null;
+    }
+
+    public MoveEffect getMoveEffect() {
+        return moveEffect;
     }
 
     public double calculateTypeEffectiveness(Pokemon defender) {
@@ -98,11 +104,17 @@ public abstract class Move {
         return hitPercent <= thresholdToHit;
     }
 
-    public AttackResult doAttack(Pokemon attacker, Pokemon defender) {
-        // TODO:
-        return null;
+    public AttackResult doAttack(Pokemon attacker, Pokemon defender, BattleContext battleContext) {
+        boolean attackShouldHit = attackDoesHit(attacker, defender);
+        int damageToDeal = (int) MathUtilities.calculateDamage(this, attacker, defender,
+                battleContext.getNumberOfTargets(), battleContext.getCurrentWeather(), battleContext.isCritical(),
+                battleContext.getOtherMultipliers());
+        MoveEffect effectToApply = getMoveEffect();
+
+        return new AttackResult(attacker, defender, attackShouldHit, damageToDeal, effectToApply);
     }
 
+    // TODO: move this to supervisor
     public void applyEffect() {
         // TODO: hasEffect() should be checked already by the time this method is called
         // TODO: apply the effect
@@ -117,7 +129,7 @@ public abstract class Move {
                 .add("power=" + power)
                 .add("accuracy=" + accuracy)
                 .add("priority=" + priority)
-                .add("hasEffect=" + hasEffect)
+                .add("moveEffect=" + moveEffect)
                 .toString();
     }
 
@@ -129,7 +141,7 @@ public abstract class Move {
         return power == move.power &&
                 accuracy == move.accuracy &&
                 priority == move.priority &&
-                hasEffect == move.hasEffect &&
+                Objects.equals(moveEffect, move.moveEffect) &&
                 Objects.equals(name, move.name) &&
                 type == move.type &&
                 Objects.equals(pp, move.pp);
@@ -137,7 +149,7 @@ public abstract class Move {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, type, pp, power, accuracy, priority, hasEffect);
+        return Objects.hash(name, type, pp, power, accuracy, priority, moveEffect);
     }
 
 }

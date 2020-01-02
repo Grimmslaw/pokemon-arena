@@ -1,9 +1,14 @@
 package com.grimmslaw.pokemon.battle;
 
-import com.grimmslaw.pokemon.model.DamageDealing;
+import com.grimmslaw.pokemon.model.AttackResult;
+import com.grimmslaw.pokemon.model.Damager;
+import com.grimmslaw.pokemon.model.Effector;
+import com.grimmslaw.pokemon.moves.MoveEffect;
 import com.grimmslaw.pokemon.pokemon.Pokemon;
 
-public class Supervisor implements DamageDealing {
+import java.util.Objects;
+
+public class Supervisor implements Damager, Effector {
 
     private static Supervisor _supervisor;
 
@@ -16,8 +21,21 @@ public class Supervisor implements DamageDealing {
         return _supervisor;
     }
 
+    private void resolveAttackResult(AttackResult attackResult) {
+        // TODO: apply reciprocal effects to attacker (e.g. recoil)
+        if (attackResult.attackShouldHit()) {
+            applyDamageTo(attackResult.getTarget(), attackResult.getDamageToDeal());
+            applyEffectTo(attackResult.getTarget(), attackResult.getEffectToApply());
+        }
+    }
+
     @Override
-    public void applyDamage(Pokemon target, int damageToDeal) {
+    public void applyEffectTo(Pokemon target, MoveEffect effectToApply) {
+        // TODO
+    }
+
+    @Override
+    public void applyDamageTo(Pokemon target, int damageToDeal) {
         // TODO: implement any necessary checks here
         if (target.receiveDamage(damageToDeal) == 0.0) {
             target.doFaint();
@@ -29,4 +47,5 @@ public class Supervisor implements DamageDealing {
         // TODO: implement any necessary checks here
         target.doFaint();
     }
+
 }

@@ -130,6 +130,33 @@ public class MathUtilities {
                 - Statistics.getStatValueIncludingStage(Stat.EVASION, defender));
     }
 
+    public static double calculateCritChanceStageAdjusted(Pokemon attacker) {
+        double result;
+        if (attacker.getCriticalStage() < 0) {
+            result = 1.0;
+        } else {
+            switch (attacker.getCriticalStage()) {
+                case 0:
+                    result = 0.0625;
+                    break;
+                case 1:
+                    result = 0.125;
+                    break;
+                case 2:
+                    result = 0.25;
+                    break;
+                case 3:
+                    result = 0.3333333333333333;
+                    break;
+                default:
+                    result = 0.5;
+                    break;
+            }
+        }
+
+        return result;
+    }
+
     private static double determineAttackOtherMods(Pokemon attacker, Pokemon defender, Move move) {
         // TODO: actually create the logic for this -- abilities and special moves
         return 1.0;
