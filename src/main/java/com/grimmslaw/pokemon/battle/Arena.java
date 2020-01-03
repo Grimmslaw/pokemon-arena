@@ -53,6 +53,11 @@ public class Arena {
         return team2;
     }
 
+    private List<PokeMove> readInPokeMoves() {
+        // TODO:
+        return new ArrayList<>();
+    }
+
     private boolean attackIsCritical(Pokemon attacker) {
         double criticalChance = MathUtilities.calculateCritChanceStageAdjusted(attacker);
         // TODO: check this logic
@@ -85,7 +90,9 @@ public class Arena {
 
     public void tick() {
         logger.trace("tick() called");
-        // TODO: do one full turn and resolve effects
+        List<PokeMove> pokeMoves = readInPokeMoves();
+        List<AttackResult> attackResults = doOneTurnOfAttacks(pokeMoves);
+        supervisor.resolveOneTurnOfAttackResults(attackResults);
     }
 
 }

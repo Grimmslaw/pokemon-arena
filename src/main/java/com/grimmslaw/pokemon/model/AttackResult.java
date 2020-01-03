@@ -14,7 +14,8 @@ public class AttackResult {
     private int damageToDeal;
     private MoveEffect effectToApply;
 
-    public AttackResult(Pokemon attacker, Pokemon target, boolean attackShouldHit, int damageToDeal, MoveEffect effectToApply) {
+    public AttackResult(Pokemon attacker, Pokemon target, boolean attackShouldHit,
+                        int damageToDeal, MoveEffect effectToApply) {
         this.attacker = attacker;
         this.target = target;
         this.attackShouldHit = attackShouldHit;
@@ -24,10 +25,6 @@ public class AttackResult {
 
     public Pokemon getAttacker() {
         return attacker;
-    }
-
-    public void setAttacker(Pokemon attacker) {
-        this.attacker = attacker;
     }
 
     public Pokemon getTarget() {

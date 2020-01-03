@@ -6,6 +6,7 @@ import com.grimmslaw.pokemon.model.Effector;
 import com.grimmslaw.pokemon.moves.MoveEffect;
 import com.grimmslaw.pokemon.pokemon.Pokemon;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Supervisor implements Damager, Effector {
@@ -26,6 +27,12 @@ public class Supervisor implements Damager, Effector {
         if (attackResult.attackShouldHit()) {
             applyDamageTo(attackResult.getTarget(), attackResult.getDamageToDeal());
             applyEffectTo(attackResult.getTarget(), attackResult.getEffectToApply());
+        }
+    }
+
+    public void resolveOneTurnOfAttackResults(List<AttackResult> attackResultList) {
+        for (AttackResult result : attackResultList) {
+            resolveAttackResult(result);
         }
     }
 
