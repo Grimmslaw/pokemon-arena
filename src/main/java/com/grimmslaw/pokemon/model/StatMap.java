@@ -22,6 +22,17 @@ public class StatMap<E> implements Map<Stat, E> {
         innerMap = new HashMap<>();
     }
 
+    public static StatMap<Integer> getIntegerStatMap(int hp, int attack, int defense, int spAttack, int spDefense, int speed) {
+        StatMap<Integer> intStatMap = new StatMap<>();
+        intStatMap.put(Stat.HIT_POINTS, hp);
+        intStatMap.put(Stat.ATTACK, attack);
+        intStatMap.put(Stat.DEFENSE, defense);
+        intStatMap.put(Stat.SPECIAL_ATTACK, spAttack);
+        intStatMap.put(Stat.SPECIAL_DEFENSE, spDefense);
+        intStatMap.put(Stat.SPEED, speed);
+        return intStatMap;
+    }
+
     @Override
     public int size() {
         return innerMap.size();

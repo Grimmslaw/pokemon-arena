@@ -1,5 +1,7 @@
 package com.grimmslaw.pokemon.pokemon;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -96,12 +98,13 @@ public class Pokemon implements Damageable, Faintable {
         this.moveset = moveset;
         this.criticalStage = 0;
         this.status = initStatus();
+        this.currentStats = new StatSet();
         this.statStages = initStatStages();
         this.fainted = false;
 
         initCurrentStats();
 
-        logger.trace("New Pokemon created: Pokemon=" + this);
+        logger.trace("New Pokemon created: Pokemon=" + this.toGsonString());
     }
 
     /**
@@ -224,7 +227,11 @@ public class Pokemon implements Damageable, Faintable {
     public void initCurrentStats() {
         for (Stat stat : Statistics.STATS) {
             if (stat == Stat.HIT_POINTS) {
-                currentStats.setOneStat(Stat.HIT_POINTS, MathUtilities.calculateHP(this));
+                try {
+                    currentStats.setOneStat(Stat.HIT_POINTS, MathUtilities.calculateHP(this));
+                } catch (NullPointerException npe) {
+                    logger.warn("currentStats=" + currentStats);
+                }
             } else {
                 currentStats.setOneStat(stat, MathUtilities.calculateStat(this, stat));
             }
@@ -264,6 +271,11 @@ public class Pokemon implements Damageable, Faintable {
                 .add("statStages=" + statStages)
                 .add("fainted=" + fainted)
                 .toString();
+    }
+
+    public String toGsonString() {
+        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
+        return gson.toJson(this);
     }
 
     @Override

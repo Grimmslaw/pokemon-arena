@@ -17,7 +17,9 @@ public class PowerPoints {
 
     public PowerPoints(int base, int max) {
         this.base = base;
+        this.current = base;
         this.max = max;
+        this.currentMax = max;
     }
 
     public int getCurrent() {
