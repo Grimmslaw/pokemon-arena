@@ -5,11 +5,12 @@ import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.statuses.containers.NonVolatileStatusContainer;
 import com.grimmslaw.pokemon.statuses.containers.VolatileBattleStatusContainer;
 import com.grimmslaw.pokemon.statuses.containers.VolatileStatusContainer;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class Status implements Turnable {
+public class Status implements Turnable, PrettyPrintable {
 
     private NonVolatileStatusContainer nonVolatileStatus;
     private VolatileStatusContainer volatileStatuses;

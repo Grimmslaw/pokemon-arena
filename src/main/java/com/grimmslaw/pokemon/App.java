@@ -29,7 +29,7 @@ public class App {
         try {
             moveset = new Moveset(tackle);
         } catch (MovesetException me) {
-            logger.warn("You really goofed.");
+            logger.warn("Moveset exception creating tackle");
             moveset = new Moveset();
         }
 

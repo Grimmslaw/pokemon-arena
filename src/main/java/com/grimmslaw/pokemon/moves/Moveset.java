@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.grimmslaw.pokemon.exceptions.moves.MovesetException;
 import com.grimmslaw.pokemon.exceptions.moves.MovesetFullException;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 
 /**
  * TODO
@@ -11,7 +12,7 @@ import com.grimmslaw.pokemon.exceptions.moves.MovesetFullException;
  * @author wesrickey
  * @since 0.0.1
  */
-public class Moveset {
+public class Moveset implements PrettyPrintable {
 
     private List<Move> movesList;
 

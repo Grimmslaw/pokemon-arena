@@ -4,12 +4,13 @@ import com.grimmslaw.pokemon.constants.Statistics;
 import com.grimmslaw.pokemon.moves.Move;
 import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.util.MathUtilities;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PokeMove {
+public class PokeMove implements PrettyPrintable {
 
     private Pokemon attacker;
     private Move move;

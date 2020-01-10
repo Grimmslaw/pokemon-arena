@@ -1,11 +1,14 @@
 package com.grimmslaw.pokemon.moves;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.grimmslaw.pokemon.battle.BattleContext;
 import com.grimmslaw.pokemon.model.AttackResult;
 import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.pokemon.DualTypePokemon;
 import com.grimmslaw.pokemon.types.Type;
 import com.grimmslaw.pokemon.util.MathUtilities;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author wesrickey
  * @since 0.0.1
  */
-public abstract class Move {
+public abstract class Move implements PrettyPrintable {
 
     private static final Logger logger = LogManager.getLogger(Move.class);
 

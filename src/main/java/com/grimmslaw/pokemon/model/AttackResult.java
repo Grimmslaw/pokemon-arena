@@ -2,11 +2,12 @@ package com.grimmslaw.pokemon.model;
 
 import com.grimmslaw.pokemon.moves.MoveEffect;
 import com.grimmslaw.pokemon.pokemon.Pokemon;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class AttackResult {
+public class AttackResult implements PrettyPrintable {
 
     private Pokemon attacker;
     private Pokemon target;

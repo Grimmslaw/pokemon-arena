@@ -1,6 +1,8 @@
 package com.grimmslaw.pokemon.battle;
 
-public class BattleContext {
+import com.grimmslaw.pokemon.util.PrettyPrintable;
+
+public class BattleContext implements PrettyPrintable {
 
     private int numberOfTargets;
     private Weather currentWeather;

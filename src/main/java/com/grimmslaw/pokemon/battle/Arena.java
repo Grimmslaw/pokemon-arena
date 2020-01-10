@@ -6,13 +6,14 @@ import com.grimmslaw.pokemon.moves.MoveEffect;
 import com.grimmslaw.pokemon.pokemon.Pokemon;
 import com.grimmslaw.pokemon.teams.Team;
 import com.grimmslaw.pokemon.util.MathUtilities;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Arena {
+public class Arena implements PrettyPrintable {
 
     private static final Logger logger = LogManager.getLogger(Arena.class);
 

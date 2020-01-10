@@ -5,6 +5,7 @@ import com.grimmslaw.pokemon.constants.Statistics.Stat;
 import com.grimmslaw.pokemon.exceptions.attributes.EVOneSlotFullException;
 import com.grimmslaw.pokemon.exceptions.attributes.EVSlotsFullException;
 import com.grimmslaw.pokemon.model.StatMap;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -16,7 +17,7 @@ import java.util.StringJoiner;
  * @author wesrickey
  * @since 0.0.1
  */
-public class EffortValues {
+public class EffortValues implements PrettyPrintable {
 
     private StatMap<Integer> valueMap;
     private int totalEVs = 0;

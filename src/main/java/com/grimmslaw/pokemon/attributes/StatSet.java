@@ -5,6 +5,7 @@ import java.util.StringJoiner;
 
 import com.grimmslaw.pokemon.constants.Statistics.Stat;
 import com.grimmslaw.pokemon.model.StatMap;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 
 /**
  * TODO
@@ -12,7 +13,7 @@ import com.grimmslaw.pokemon.model.StatMap;
  * @author wesrickey
  * @since 0.0.1
  */
-public class StatSet {
+public class StatSet implements PrettyPrintable {
 
     private StatMap<Double> stats = new StatMap<>();
 

@@ -1,12 +1,13 @@
 package com.grimmslaw.pokemon.model;
 
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class Duration {
+public class Duration implements PrettyPrintable {
 
     private static final Logger logger = LogManager.getLogger(Duration.class);
 

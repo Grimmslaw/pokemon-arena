@@ -7,6 +7,7 @@ import java.util.StringJoiner;
 import com.grimmslaw.pokemon.constants.Statistics;
 import com.grimmslaw.pokemon.constants.Statistics.Stat;
 import com.grimmslaw.pokemon.model.StatMap;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 
 /**
  * Defines an IndividualValues object, with IVs corresponding to each stat and causing each stat to grow at a speed
@@ -17,7 +18,7 @@ import com.grimmslaw.pokemon.model.StatMap;
  * @author wesrickey
  * @since 0.0.1
  */
-public class IndividualValues {
+public class IndividualValues implements PrettyPrintable {
 
     private StatMap<Integer> valueMap;
 

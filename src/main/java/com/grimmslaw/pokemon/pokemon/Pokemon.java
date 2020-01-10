@@ -2,6 +2,7 @@ package com.grimmslaw.pokemon.pokemon;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -29,7 +30,7 @@ import java.util.StringJoiner;
  * @author wesrickey
  * @since 0.0.1
  */
-public class Pokemon implements Damageable, Faintable {
+public class Pokemon implements Damageable, Faintable, PrettyPrintable {
 
     private static final Logger logger = LogManager.getLogger(Pokemon.class);
 
@@ -104,7 +105,7 @@ public class Pokemon implements Damageable, Faintable {
 
         initCurrentStats();
 
-        logger.trace("New Pokemon created: Pokemon=" + this.toGsonString());
+        logger.trace("New Pokemon created: Pokemon=" + toStringPretty());
     }
 
     /**
@@ -271,11 +272,6 @@ public class Pokemon implements Damageable, Faintable {
                 .add("statStages=" + statStages)
                 .add("fainted=" + fainted)
                 .toString();
-    }
-
-    public String toGsonString() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().create();
-        return gson.toJson(this);
     }
 
     @Override

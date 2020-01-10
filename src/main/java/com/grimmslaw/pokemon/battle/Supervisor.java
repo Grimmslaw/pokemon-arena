@@ -5,11 +5,12 @@ import com.grimmslaw.pokemon.model.Damager;
 import com.grimmslaw.pokemon.model.Effector;
 import com.grimmslaw.pokemon.moves.MoveEffect;
 import com.grimmslaw.pokemon.pokemon.Pokemon;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 
 import java.util.List;
 import java.util.Objects;
 
-public class Supervisor implements Damager, Effector {
+public class Supervisor implements Damager, Effector, PrettyPrintable {
 
     private static Supervisor _supervisor;
 

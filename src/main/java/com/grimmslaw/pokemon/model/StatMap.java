@@ -3,6 +3,7 @@ package com.grimmslaw.pokemon.model;
 import java.util.*;
 
 import com.grimmslaw.pokemon.constants.Statistics.Stat;
+import com.grimmslaw.pokemon.util.PrettyPrintable;
 
 /**
  * TODO
@@ -11,7 +12,7 @@ import com.grimmslaw.pokemon.constants.Statistics.Stat;
  * @since 0.0.1
  * @param <E>
  */
-public class StatMap<E> implements Map<Stat, E> {
+public class StatMap<E> implements Map<Stat, E>, PrettyPrintable {
 
     private Map<Stat, E> innerMap;
 
